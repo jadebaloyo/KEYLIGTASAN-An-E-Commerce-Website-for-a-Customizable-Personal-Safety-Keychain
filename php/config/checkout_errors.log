@@ -1,0 +1,2 @@
+[07-Feb-2026 12:26:34 Asia/Manila] Order processing error: Failed to prepare order statement: Unknown column 'subtotal' in 'field list'
+[07-Feb-2026 12:26:34 Asia/Manila] Stack trace: #0 {main}

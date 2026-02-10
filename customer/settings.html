@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - KEYLIGTASAN</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/settings.css">
+</head>
+<body>
+    
+    <!-- Main Container -->
+    <div class="page-wrapper">
+        
+        <!-- Back Button -->
+        <div class="back-button-container">
+            <a href="dashboard.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="content-grid">
+            
+            <!-- Left Card: Account and Security -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>ACCOUNT AND SECURITY</h3>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Profile Circle -->
+                    <div class="profile-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    
+                    <!-- Edit Profile Button -->
+                    <button class="btn-edit-profile" onclick="handleEditProfile()">
+                        Edit Profile
+                    </button>
+                    
+                    <!-- Form Fields -->
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>My Date of Birth</label>
+                            <input type="date" id="birthdate" value="1990-01-01" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Change E-mail</label>
+                            <input type="email" id="email" placeholder="Enter new email">
+                        </div>
+                        
+                        <button type="submit" class="btn-save">Save</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Middle Card: Change Password -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>CHANGE PASSWORD</h3>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Password Change Form -->
+                    <form class="password-form">
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="currentPassword" placeholder="Enter current password">
+                                <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('currentPassword')"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                                <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('newPassword')"></i>
+                            </div>
+                            <small class="password-hint">Password must be at least 8 characters long</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('confirmPassword')"></i>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-save">Update Password</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Right Card: New Address -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>NEW ADDRESS</h3>
+                </div>
+                
+                <div class="card-body">
+                    <!-- New Address Form -->
+                    <form class="address-form">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" placeholder="Enter address">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Contact Number</label>
+                            <input type="tel" placeholder="+63 XXX XXX XXXX">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Region, Province, City, Barangay</label>
+                            <input type="text" placeholder="Enter region, province, city, barangay">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Postal Code</label>
+                            <input type="text" placeholder="Enter postal code">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Some useful including company address</label>
+                            <input type="text" placeholder="Additional info">
+                        </div>
+                        
+                        <!-- Checkbox -->
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="defaultAddress">
+                                <span>Set as Default Address</span>
+                            </label>
+                        </div>
+                        
+                        <!-- Buttons -->
+                        <div class="button-group">
+                            <button type="button" class="btn-cancel" onclick="handleCancel()">Cancel</button>
+                            <button type="submit" class="btn-submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="../js/settings.js"></script>
+    
+</body>
+</html>

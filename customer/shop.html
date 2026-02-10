@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - KEYLIGTASAN</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/cart.css">
+
+
+    <!-- Fallback: keeps all popups hidden until JS explicitly opens them -->
+    <style>
+        .cart-popup,
+        .checkout-popup,
+        .order-success-popup {
+            display: none !important;
+        }
+        .cart-popup.active,
+        .checkout-popup.active,
+        .order-success-popup.active {
+            display: flex !important;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <div class="nav-logo">
+                <i class="fas fa-key"></i>
+                <span>KEYLIGTASAN</span>
+            </div>
+            
+            <!-- Nav Links -->
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-btn">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="orders.html" class="nav-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>My Orders</span>
+                </a>
+                <a href="shop.html" class="nav-btn active">
+                    <i class="fas fa-store"></i>
+                    <span>Shop</span>
+                </a>
+            </div>
+            
+            <!-- User Section -->
+            <div class="nav-user">
+                <div class="cart-icon" onclick="viewCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </div>
+                
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">User</span>
+                </div>
+                
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Shop Header -->
+        <div class="shop-header">
+            <h1>Customize Your KEYLIGTASAN</h1>
+            <p>Create your personalized safety keychain with custom colors and engraving</p>
+        </div>
+        
+        <!-- Product Customization Section -->
+        <div class="product-customization">
+            
+            <!-- Product Preview -->
+            <div class="product-preview">
+                <div class="preview-badge">Customizable</div>
+                <div class="preview-image" id="keychainPreview">
+                    <img src="../assets/images/chocolatebrown.png" alt="KEYLIGTASAN Keychain" id="keychainImage">
+                    <div class="engraving-preview" id="engravingPreview"></div>
+                </div>
+                <div class="preview-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(4.8) 2,341 Reviews</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customization Options -->
+            <div class="customization-options">
+                <h2>KEYLIGTASAN Safety Keychain</h2>
+                <p class="product-desc">Your personal safety device with emergency alert, GPS tracking, and LED light. Make it uniquely yours!</p>
+                
+                <div class="price-section">
+                    <span class="base-price">Base Price: ₱299</span>
+                    <div class="total-price">
+                        <span class="label">Total:</span>
+                        <span class="amount" id="totalPrice">₱299</span>
+                    </div>
+                </div>
+                
+                <!-- Color Selection -->
+                <div class="option-group">
+                    <label class="option-label">
+                        <i class="fas fa-palette"></i>
+                        Choose Your Color
+                    </label>
+                    <div class="color-options" id="colorOptions">
+                        <div class="color-option active" data-image="chocolatebrown" data-name="Chocolate Brown" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #8B4513;"></div>
+                            <span>Chocolate Brown</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="emeraldgreen" data-name="Emerald Green" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #27ae60;"></div>
+                            <span>Emerald Green</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="goldenorange" data-name="Golden Orange" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #f39c12;"></div>
+                            <span>Golden Orange</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="midnightblack" data-name="Midnight Black" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #2c3e50;"></div>
+                            <span>Midnight Black</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="oceanblue" data-name="Ocean Blue" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #3498db;"></div>
+                            <span>Ocean Blue</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="rosepink" data-name="Rose Pink" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #ff69b4;"></div>
+                            <span>Rose Pink</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="royalpurple" data-name="Royal Purple" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #9b59b6;"></div>
+                            <span>Royal Purple</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="color-option" data-image="rubyred" data-name="Ruby Red" onclick="selectColor(this)">
+                            <div class="color-circle" style="background-color: #e74c3c;"></div>
+                            <span>Ruby Red</span>
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    <p class="option-note">
+                        <i class="fas fa-info-circle"></i>
+                        Selected: <span id="selectedColorName">Chocolate Brown</span>
+                    </p>
+                </div>
+                
+                <!-- Engraving Option -->
+                <div class="option-group">
+                    <label class="option-label">
+                        <i class="fas fa-pencil-alt"></i>
+                        Add Personal Engraving
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    
+                    <div class="engraving-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="engravingToggle" onchange="toggleEngraving()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="toggle-label">Add engraving (+₱50)</span>
+                    </div>
+                    
+                    <div class="engraving-input" id="engravingInput" style="display: none;">
+                        <input 
+                            type="text" 
+                            id="engravingText" 
+                            placeholder="Enter text (max 20 characters)" 
+                            maxlength="20"
+                            oninput="updateEngraving()"
+                        >
+                        <div class="char-count">
+                            <span id="charCount">0</span>/20 characters
+                        </div>
+                        <p class="engraving-note">
+                            <i class="fas fa-info-circle"></i>
+                            Your text will be elegantly engraved on the keychain
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Quantity Selection -->
+                <div class="option-group">
+                    <label class="option-label">
+                        <i class="fas fa-sort-numeric-up"></i>
+                        Quantity
+                    </label>
+                    <div class="quantity-selector">
+                        <button class="qty-btn" onclick="decreaseQuantity()">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" id="quantity" value="1" min="1" max="10" readonly>
+                        <button class="qty-btn" onclick="increaseQuantity()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <p class="option-note">
+                        <i class="fas fa-truck"></i>
+                        Free shipping on orders over ₱500
+                    </p>
+                </div>
+                
+                <!-- Add to Cart Button -->
+                <button class="btn-add-to-cart" onclick="addToCart()">
+                    <i class="fas fa-cart-plus"></i>
+                    Add to Cart
+                </button>
+                
+                <!-- Product Features -->
+                <div class="product-features">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><i class="fas fa-shield-alt"></i> Emergency SOS Alert System</li>
+                        <li><i class="fas fa-map-marker-alt"></i> GPS Location Tracking</li>
+                        <li><i class="fas fa-lightbulb"></i> Built-in LED Flashlight</li>
+                        <li><i class="fas fa-volume-up"></i> 120dB Personal Alarm</li>
+                        <li><i class="fas fa-battery-full"></i> Long-lasting Battery Life</li>
+                        <li><i class="fas fa-mobile-alt"></i> Smartphone App Integration</li>
+                    </ul>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <!-- Shopping Cart Popup (hidden by default) -->
+    <div class="cart-popup" id="cartPopup" style="display: none;">
+        <div class="cart-overlay" onclick="closeCart()"></div>
+        
+        <div class="cart-container">
+            <div class="cart-header">
+                <h2>
+                    <i class="fas fa-shopping-cart"></i>
+                    Shopping Cart
+                </h2>
+                <button class="close-cart" onclick="closeCart()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cart-body" id="cartItems">
+                <div class="empty-cart" id="emptyCart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Your cart is empty</p>
+                    <button class="btn-continue" onclick="closeCart()">Continue Shopping</button>
+                </div>
+            </div>
+            
+            <div class="cart-footer" id="cartFooter" style="display: none;">
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="cartSubtotal">₱0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span id="cartShipping">₱0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="cartTotal">₱0</span>
+                    </div>
+                </div>
+                
+                <button class="btn-checkout" onclick="proceedToCheckout()">
+                    <i class="fas fa-credit-card"></i>
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Confirmation Popup (hidden by default) -->
+    <!-- FIXED: Removed onclick from overlay -->
+    <div class="checkout-popup" id="checkoutPopup" style="display: none;">
+        <div class="checkout-overlay"></div>
+        
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h2>Confirm Your Order</h2>
+                <button class="close-checkout" onclick="closeCheckout()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="checkout-body">
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div id="checkoutItems"></div>
+                    
+                    <div class="checkout-total">
+                        <div class="total-row">
+                            <span>Total Amount:</span>
+                            <span id="checkoutTotal">₱0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="delivery-info">
+                    <h3>Delivery Information</h3>
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="deliveryName" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contact Number *</label>
+                        <input type="tel" id="deliveryPhone" placeholder="+63 XXX XXX XXXX">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Delivery Address *</label>
+                        <textarea id="deliveryAddress" rows="3" placeholder="Enter your full delivery address"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Payment Method *</label>
+                        <select id="paymentMethod">
+                            <option value="">Select payment method</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                            <option value="GCash">GCash</option>
+                            <option value="PayMaya">PayMaya</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notes (Optional)</label>
+                        <textarea id="orderNotes" rows="2" placeholder="Any special instructions..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="checkout-footer">
+                <button class="btn-cancel" onclick="closeCheckout()">Cancel</button>
+                <button class="btn-place-order" onclick="placeOrder()">
+                    <i class="fas fa-check-circle"></i>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Popup (hidden by default) -->
+    <div class="order-success-popup" id="orderSuccessPopup" style="display: none;">
+        <div class="success-overlay"></div>
+        
+        <div class="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h2>Order Placed Successfully!</h2>
+            
+            <div class="order-details">
+                <p>Order ID: <strong id="orderIdDisplay">#0001</strong></p>
+                <p>Total: <strong id="orderTotalDisplay">₱0</strong></p>
+                <p>Status: <strong class="status-pending">Processing</strong></p>
+            </div>
+            
+            <p class="success-message">
+                Thank you for your order! We'll send you a confirmation email shortly.
+            </p>
+            
+            <div class="success-buttons">
+                <button class="btn-view-orders" onclick="viewOrders()">
+                    <i class="fas fa-shopping-bag"></i>
+                    View My Orders
+                </button>
+                <button class="btn-continue-shopping" onclick="closeOrderSuccess()">
+                    <i class="fas fa-store"></i>
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="../js/shop.js"></script>
+    
+    <!-- FIXED: Add overlay click handler after page loads to prevent immediate closure -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkoutOverlay = document.querySelector('.checkout-popup .checkout-overlay');
+        if (checkoutOverlay) {
+            checkoutOverlay.addEventListener('click', function(e) {
+                const popup = document.getElementById('checkoutPopup');
+                // Only close if the popup is actually active
+                if (popup && popup.classList.contains('active')) {
+                    closeCheckout();
+                }
+            });
+        }
+    });
+    </script>
+    
+</body>
+</html>

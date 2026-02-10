@@ -1,0 +1,372 @@
+<?php 
+session_start(); 
+$adminUserId = $_SESSION['user_id'] ?? '11'; 
+$adminName = $_SESSION['name'] ?? 'System Administrator'; 
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KEYLIGTASAN</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/admin_dashboard.css">
+    <link rel="stylesheet" href="../css/admin_chat.css">
+</head>
+<body>
+    <!-- ✅ Hidden input to store admin user ID for JavaScript -->
+    <input type="hidden" id="adminUserId" value="<?php echo $adminUserId; ?>">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-key"></i>
+            <span>KEYLIGTASAN</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="#" class="menu-item active" data-section="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item" data-section="orders">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Orders</span>
+            </a>
+            <a href="#" class="menu-item" data-section="products">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="#" class="menu-item" data-section="chat-support">
+                <i class="fas fa-comments"></i>
+                <span>Chat Support</span>
+                <span class="badge" id="unreadChatsCount" style="display:none;">0</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="../html/homepage_index.html" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Navigation Bar -->
+        <header class="top-navbar">
+            <div class="navbar-left">
+                <button class="toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Admin Dashboard</h1>
+            </div>
+            
+            <div class="navbar-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <div class="content-wrapper">
+            
+            <!-- ========== DASHBOARD SECTION ========== -->
+            <section id="dashboard" class="content-section active">
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon total-orders">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Orders</p>
+                            <h3 class="stat-value" id="totalOrders">0</h3>
+                            <p class="stat-change">+12% from last month</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon pending-orders">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Pending Orders</p>
+                            <h3 class="stat-value" id="pendingOrders">0</h3>
+                            <p class="stat-change">Awaiting approval</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon total-revenue">
+                            <i class="fas fa-peso-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Revenue</p>
+                            <h3 class="stat-value" id="totalRevenue">₱0</h3>
+                            <p class="stat-change">+8% from last month</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon active-resellers">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Products</p>
+                            <h3 class="stat-value" id="totalProducts">0</h3>
+                            <p class="stat-change">In inventory</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts and Tables Row -->
+                <div class="dashboard-grid">
+                    <div class="chart-container">
+                        <h3>Most Ordered Products</h3>
+                        <canvas id="orderedProductsChart"></canvas>
+                    </div>
+                    
+                    <div class="recent-orders">
+                        <h3>Recent Orders</h3>
+                        <div id="recentOrdersList" class="orders-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ========== ORDERS SECTION ========== -->
+            <section id="orders" class="content-section">
+                <div class="section-header">
+                    <h2>Orders Management</h2>
+                    <div class="section-controls">
+                        <select id="orderStatusFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="processing">Processing</option>
+                            <option value="ready">Ready for Pickup</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <input type="date" id="orderDateFilter" class="filter-input">
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- ========== PRODUCTS SECTION ========== -->
+            <section id="products" class="content-section">
+                <div class="section-header">
+                    <h2>Products Management</h2>
+                    <div class="section-controls">
+                        <button class="btn-primary" onclick="openAddProductModal()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here dynamically -->
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-spinner fa-spin fa-3x"></i>
+                        <p>Loading products...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ========== CHAT SUPPORT SECTION ========== -->
+            <section id="chat-support" class="content-section">
+                <div class="chat-container">
+                    <!-- Chat List Sidebar -->
+                    <div class="chat-list-panel">
+                        <div class="chat-list-header">
+                            <h3>Customer Chats</h3>
+                            <div class="chat-filters">
+                                <button class="filter-btn active" data-filter="all">
+                                    All <span id="allChatsCount">0</span>
+                                </button>
+                                <button class="filter-btn" data-filter="unread">
+                                    Unread <span id="unreadBadge">0</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-search">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="chatSearchInput" placeholder="Search customers...">
+                        </div>
+                        
+                        <div class="chat-list" id="chatList">
+                            <!-- Chat items will be loaded here -->
+                            <div class="chat-list-empty">
+                                <i class="fas fa-comments"></i>
+                                <p>No chat conversations yet</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Messages Panel -->
+                    <div class="chat-messages-panel">
+                        <div class="no-chat-selected" id="noChatSelected">
+                            <i class="fas fa-comments"></i>
+                            <h3>Select a conversation</h3>
+                            <p>Choose a customer from the list to start chatting</p>
+                        </div>
+                        
+                        <div class="chat-active" id="chatActive" style="display: none;">
+                            <!-- Chat Header -->
+                            <div class="chat-header">
+                                <div class="chat-user-info">
+                                    <div class="chat-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="chat-user-details">
+                                        <h4 id="chatUserName">Customer Name</h4>
+                                        <span class="chat-user-status" id="chatUserStatus">
+                                            <i class="fas fa-circle"></i> Online
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="chat-actions">
+                                    <button class="chat-action-btn" onclick="viewCustomerInfo()" title="Customer Info">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                    <button class="chat-action-btn" onclick="closeChat()" title="Close Chat">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Chat Messages Area -->
+                            <div class="chat-messages" id="chatMessages">
+                                <!-- Messages will be loaded here -->
+                            </div>
+                            
+                            <!-- Chat Input Area -->
+                            <div class="chat-input-area">
+                                <button class="attach-btn" onclick="attachFile()">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <textarea 
+                                    id="chatMessageInput" 
+                                    placeholder="Type your message..."
+                                    rows="1"
+                                    onkeydown="handleChatKeyPress(event)"
+                                ></textarea>
+                                <button class="send-btn" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Info Panel (Collapsible) -->
+                    <div class="customer-info-panel" id="customerInfoPanel">
+                        <div class="customer-info-header">
+                            <h3>Customer Information</h3>
+                            <button class="close-info-btn" onclick="closeCustomerInfo()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="customer-info-content" id="customerInfoContent">
+                            <!-- Customer details will be loaded here -->
+                            <div class="info-section">
+                                <h4>Contact Details</h4>
+                                <div class="info-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span id="customerEmail">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span id="customerPhone">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <h4>Order History</h4>
+                                <div id="customerOrders">
+                                    <p class="text-muted">No orders yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Modals -->
+    
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('orderModal')">&times;</span>
+            <h2>Order Details</h2>
+            <div id="orderDetails">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('orderModal')">Close</button>
+                <button class="btn-primary" id="updateOrderBtn" onclick="updateOrderStatus()">Update Status</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Product Details Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('productModal')">&times;</span>
+            <h2>Product Details</h2>
+            <div id="productDetails">
+                <!-- Product details will be loaded here -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('productModal')">Close</button>
+                <button class="btn-primary" onclick="editProduct()">Edit Product</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ✅ USE YOUR EXISTING JAVASCRIPT FILES -->
+    <script src="../js/admin_dashboard.js?v=7"></script>
+    <script src="../js/products_management_mysql.js?v=5"></script>
+    <script src="../js/admin_chat.js?v=2"></script>
+    <script src="../js/checkout_with_stock_reduction.js"></script>
+</body>
+</html>

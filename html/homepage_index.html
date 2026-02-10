@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KEYLIGTASAN - IoT-enabled personal safety keychain with mobile app support. Stay safe in crowded places.">
+    <meta name="keywords" content="safety keychain, personal safety, IoT security, emergency alert, GPS tracking">
+    <title>KEYLIGTASAN - IoT Personal Safety Keychain</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/support-modal-with-upload.css">
+    <link rel="stylesheet" href="../css/support-modal.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+    /* Support Modal Inline Styles - COMPLETE OVERRIDE */
+    .support-modal {
+        display: none !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: rgba(0, 0, 0, 0.7) !important;
+        z-index: 999999 !important;
+        overflow-y: auto !important;
+        padding: 20px !important;
+    }
+    
+    .support-modal-container {
+        background: white !important;
+        border-radius: 12px !important;
+        max-width: 600px !important;
+        width: 100% !important;
+        position: relative !important;
+        margin: 50px auto !important;
+        animation: modalSlideIn 0.3s ease-out !important;
+    }
+    
+    @keyframes modalSlideIn {
+        from { opacity: 0; transform: translateY(-50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal-close {
+        position: absolute !important;
+        top: 15px !important;
+        right: 15px !important;
+        background: none !important;
+        border: none !important;
+        font-size: 24px !important;
+        cursor: pointer !important;
+        color: #7F8C8D !important;
+        width: 40px !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        transition: all 0.3s !important;
+        z-index: 10 !important;
+    }
+    
+    .modal-close:hover {
+        background: #f0f0f0 !important;
+        color: #E74C3C !important;
+    }
+    
+    .support-modal-header {
+        padding: 30px !important;
+        border-bottom: 1px solid #e0e0e0 !important;
+    }
+    
+    .support-modal-header h2 {
+        font-size: 28px !important;
+        margin-bottom: 10px !important;
+        color: #E74C3C !important;
+    }
+    
+    .support-modal-header p {
+        color: #7F8C8D !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .modal-search-box {
+        display: flex !important;
+        gap: 10px !important;
+    }
+    
+    .modal-search-box input {
+        flex: 1 !important;
+        padding: 12px 15px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 6px !important;
+        font-size: 14px !important;
+    }
+    
+    .modal-search-box button {
+        padding: 12px 20px !important;
+        background: #E74C3C !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+    }
+    
+    .support-modal-body {
+        padding: 30px !important;
+    }
+    
+    .support-form-card-modal h3 {
+        margin-bottom: 20px !important;
+        font-size: 20px !important;
+    }
+    
+    .modal-alert {
+        padding: 12px 15px !important;
+        border-radius: 6px !important;
+        margin-bottom: 20px !important;
+        display: none !important;
+    }
+    
+    .modal-alert-success {
+        background: #d4edda !important;
+        color: #155724 !important;
+        border: 1px solid #c3e6cb !important;
+    }
+    
+    .modal-alert-error {
+        background: #f8d7da !important;
+        color: #721c24 !important;
+        border: 1px solid #f5c6cb !important;
+    }
+    
+    .form-group {
+        margin-bottom: 20px !important;
+    }
+    
+    .form-group label {
+        display: block !important;
+        margin-bottom: 8px !important;
+        font-weight: 500 !important;
+        color: #2C3E50 !important;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100% !important;
+        padding: 12px 15px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 6px !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 14px !important;
+    }
+    
+    .file-upload-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        gap: 15px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .btn-upload {
+        padding: 10px 20px !important;
+        background: #3498DB !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+    
+    .file-info {
+        color: #7F8C8D !important;
+        font-size: 14px !important;
+    }
+    
+    .image-preview-container {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        margin-top: 15px !important;
+    }
+    
+    .preview-item {
+        position: relative !important;
+        width: 100px !important;
+        height: 100px !important;
+        border-radius: 6px !important;
+        overflow: hidden !important;
+        border: 2px solid #e0e0e0 !important;
+    }
+    
+    .preview-item img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    .preview-remove {
+        position: absolute !important;
+        top: 5px !important;
+        right: 5px !important;
+        background: #E74C3C !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 25px !important;
+        height: 25px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 12px !important;
+    }
+    
+    .btn-submit-modal {
+        width: 100% !important;
+        padding: 14px !important;
+        background: #E74C3C !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 6px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+    }
+    
+    /* Product Carousel Styles */
+    .product-carousel-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    .carousel-wrapper {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+    
+    .carousel-slide {
+        min-width: 100%;
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .product-image {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+    
+    .product-info {
+        text-align: center;
+        max-width: 600px;
+    }
+    
+    .product-name {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #2d3748;
+    }
+    
+    .product-price {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #E74C3C;
+        margin-bottom: 1rem;
+    }
+    
+    .product-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #4a5568;
+        margin-bottom: 2rem;
+    }
+    
+    .product-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .feature-tag {
+        background: #f7fafc;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .feature-tag i {
+        color: #E74C3C;
+    }
+    
+    .btn-buy-now {
+        background: linear-gradient(135deg, #E74C3C, #C0392B);
+        color: white;
+        padding: 1rem 3rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .btn-buy-now:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+    }
+    
+    .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #2d3748;
+        transition: all 0.3s;
+        z-index: 10;
+    }
+    
+    .carousel-nav:hover {
+        background: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        color: #E74C3C;
+    }
+    
+    .carousel-prev {
+        left: 1rem;
+    }
+    
+    .carousel-next {
+        right: 1rem;
+    }
+    
+    .carousel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        padding-bottom: 1rem;
+    }
+    
+    .carousel-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #cbd5e0;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .carousel-dot.active {
+        background: #E74C3C;
+        transform: scale(1.3);
+    }
+    
+    .color-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        background: linear-gradient(135deg, #E74C3C, #C0392B);
+        color: white;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+    
+    @media (max-width: 768px) {
+        .carousel-slide {
+            padding: 2rem 1rem;
+        }
+        
+        .product-name {
+            font-size: 1.5rem;
+        }
+        
+        .product-price {
+            font-size: 1.4rem;
+        }
+        
+        .product-description {
+            font-size: 1rem;
+        }
+        
+        .carousel-nav {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+        
+        .product-features {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+</head>
+<body>
+    
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="#home" class="smooth-scroll">
+                        <i class="fas fa-key"></i>
+                        <span>KEYLIGTASAN</span>
+                    </a>
+                </div>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home" class="smooth-scroll active">HOME</a></li>
+                    <li><a href="#about" class="smooth-scroll">ABOUT US</a></li>
+                    <li><a href="#how-it-works" class="smooth-scroll">HOW IT WORKS</a></li>
+                    <li><a href="#products" class="smooth-scroll">PRODUCTS</a></li>
+                    <li><a href="download_app.html">DOWNLOAD APP</a></li>
+                    <li><a href="#contact-us" class="smooth-scroll">CONTACT US</a></li>
+                </ul>
+                
+                <div class="nav-actions" id="navActions">
+                    <div class="auth-buttons" id="authButtons">
+                        <a href="login.html" class="btn btn-outline">LOGIN</a>
+                        <a href="register.html" class="btn btn-primary">REGISTER</a>
+                    </div>
+                    
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-menu-btn" id="userMenuBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userName">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-info">
+                                <p class="user-name" id="userFullName">Loading...</p>
+                                <p class="user-email" id="userEmail">Loading...</p>
+                            </div>
+                            <ul>
+                                <li><a href="#" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                                <li><a href="../customer/orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
+                                <li><a href="../customer/profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                                <li><a href="../customer/settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="burger-btn" id="burgerBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-user" id="sidebarUser" style="display: none;">
+                <i class="fas fa-user-circle"></i>
+                <div class="user-details">
+                    <p class="user-name" id="sidebarUserName">Loading...</p>
+                    <p class="user-email" id="sidebarUserEmail">Loading...</p>
+                </div>
+            </div>
+            <h3 id="sidebarTitle">Menu</h3>
+            <button class="close-sidebar" id="closeSidebar">&times;</button>
+        </div>
+        
+        <ul class="sidebar-menu" id="sidebarMenu">
+            <li><a href="#home" class="smooth-scroll"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#about" class="smooth-scroll"><i class="fas fa-info-circle"></i> About Us</a></li>
+            <li><a href="#how-it-works" class="smooth-scroll"><i class="fas fa-cogs"></i> How It Works</a></li>
+            <li><a href="download_app.html"><i class="fas fa-download"></i> Download App</a></li>
+            <li><a href="#contact-us" class="smooth-scroll"><i class="fas fa-envelope"></i> Contact Us</a></li>
+            
+            <li class="menu-divider" id="authDivider"></li>
+            <li id="loginLink"><a href="../html/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <li id="registerLink"><a href="../html/register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+            
+            <div id="userLinks" style="display: none;">
+                <li class="menu-divider"></li>
+                <li><a href="#" id="mobileDashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../customer/orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
+                <li><a href="../customer/profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                <li><a href="../customer/settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li class="menu-divider"></li>
+                <li><a href="#" id="mobileLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </div>
+        </ul>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- HERO SECTION -->
+        <section class="hero" id="home">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Stay Safe with <span>KEYLIGTASAN</span></h1>
+                    <p class="hero-subtitle">IoT-Enabled Personal Safety Keychain with Mobile App Support</p>
+                    <p class="hero-description">Your portable security companion for crowded places and emergencies. Features motion detection, SOS alerts, GPS tracking, and real-time notifications.</p>
+                    <div class="hero-buttons">
+                        <a href="#products" class="btn btn-primary btn-lg smooth-scroll">
+                            <i class="fas fa-shopping-cart"></i> Shop Now
+                        </a>
+                        <a href="#how-it-works" class="btn btn-outline-white btn-lg smooth-scroll">
+                            <i class="fas fa-play-circle"></i> Learn More
+                        </a>
+                    </div>
+                    
+                    <div class="trust-badges">
+                        <div class="badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verified</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-truck"></i>
+                            <span>Fast Delivery</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ABOUT SECTION -->
+        <section class="about-section" id="about" style="padding: 4rem 0; background: var(--bg-secondary);">
+            <div class="container">
+                <div class="section-header">
+                    <h2>About KEYLIGTASAN</h2>
+                    <p>Your Trusted Personal Safety Companion</p>
+                </div>
+                
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 3rem;">
+                        <p style="font-size: 1.125rem; line-height: 1.8; margin-bottom: 2rem; color: var(--text-primary);">
+                            KEYLIGTASAN is an innovative IoT-enabled personal safety keychain designed to protect individuals in crowded and high-risk areas. Our mission is to provide accessible, reliable, and immediate security solutions through cutting-edge technology.
+                        </p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                <i class="fas fa-bullseye" style="font-size: 1.5rem; color: white;"></i>
+                            </div>
+                            <h3 style="text-align: center; margin-bottom: 1rem; font-size: 1.25rem;">Our Mission</h3>
+                            <p style="text-align: center; color: var(--text-secondary); line-height: 1.6;">
+                                To empower individuals with innovative safety technology, reducing crime rates and enhancing public security in the Philippines.
+                            </p>
+                        </div>
+                        
+                        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                <i class="fas fa-globe" style="font-size: 1.5rem; color: white;"></i>
+                            </div>
+                            <h3 style="text-align: center; margin-bottom: 1rem; font-size: 1.25rem;">SDG Alignment</h3>
+                            <p style="text-align: center; color: var(--text-secondary); line-height: 1.6;">
+                                Supporting UN Sustainable Development Goals: SDG 16 (Peace & Justice), SDG 11 (Sustainable Cities), and SDG 9 (Innovation).
+                            </p>
+                        </div>
+                        
+                        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                <i class="fas fa-lightbulb" style="font-size: 1.5rem; color: white;"></i>
+                            </div>
+                            <h3 style="text-align: center; margin-bottom: 1rem; font-size: 1.25rem;">Why We Built This</h3>
+                            <p style="text-align: center; color: var(--text-secondary); line-height: 1.6;">
+                                In response to rising theft incidents in crowded places, providing instant emergency alerts and GPS tracking for immediate help.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- FEATURES SECTION -->
+        <section class="features" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Why Choose KEYLIGTASAN?</h2>
+                    <p>Advanced safety features designed to protect you</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3>Motion Detection</h3>
+                        <p>Automatically detects suspicious movements and bag tampering in crowded areas.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>SOS Alert System</h3>
+                        <p>Instant emergency alerts sent to your contacts and authorities with one touch.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>GPS Tracking</h3>
+                        <p>Real-time location tracking and sharing for immediate emergency response.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Mobile App Integration</h3>
+                        <p>Full control through our user-friendly mobile application for Android.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-battery-full"></i>
+                        </div>
+                        <h3>Long Battery Life</h3>
+                        <p>Rechargeable LiPo battery lasts up to 7 days on a single charge.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bluetooth"></i>
+                        </div>
+                        <h3>Bluetooth Connectivity</h3>
+                        <p>Seamless connection to your smartphone via Bluetooth Low Energy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- PRODUCTS CAROUSEL SECTION -->
+        <section class="products" id="products" style="padding: 4rem 0; background: #f7fafc;">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Our Products</h2>
+                    <p>Choose your favorite color - Available in 8 vibrant options</p>
+                </div>
+                
+                <div class="product-carousel-container">
+                    <div class="carousel-wrapper">
+                        <button class="carousel-nav carousel-prev" id="prevBtn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Chocolate Brown -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/chocolatebrown.png" alt="Chocolate Brown KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Chocolate Brown</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Stylish chocolate brown design with IoT-enabled safety features. Perfect for those who prefer elegant, classic colors.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Emerald Green -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/emeraldgreen.png" alt="Emerald Green KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Emerald Green</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Fresh emerald green design that stands out. IoT-enabled protection in a vibrant, nature-inspired color.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Golden Orange -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/goldenorange.png" alt="Golden Orange KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Golden Orange</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Bright golden orange for maximum visibility. Stay safe and stylish with this eye-catching design.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Midnight Black -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/midnightblack.png" alt="Midnight Black KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Midnight Black</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Sleek midnight black for a professional, modern look. Timeless design with cutting-edge safety technology.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Ocean Blue -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/oceanblue.png" alt="Ocean Blue KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Ocean Blue</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Cool ocean blue that's both calming and confident. Advanced safety features in a beautiful aquatic shade.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Rose Pink -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/rosepink.png" alt="Rose Pink KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Rose Pink</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Lovely rose pink design combining elegance with safety. Perfect for those who love feminine, cheerful colors.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Royal Purple -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/royalpurple.png" alt="Royal Purple KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Royal Purple</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Regal royal purple for a bold, sophisticated statement. Premium safety technology in a majestic color.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Ruby Red -->
+                            <div class="carousel-slide">
+                                <img src="../assets/images/rubyred.png" alt="Ruby Red KEYLIGTASAN" class="product-image">
+                                <div class="product-info">
+                                    <span class="color-badge">Ruby Red</span>
+                                    <h3 class="product-name">KEYLIGTASAN Safety Keychain</h3>
+                                    <p class="product-price">₱599.00</p>
+                                    <p class="product-description">
+                                        Vibrant ruby red that catches attention. Bold color choice with powerful safety features to protect you.
+                                    </p>
+                                    <div class="product-features">
+                                        <div class="feature-tag">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Motion Detection</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>GPS Tracking</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>App Connected</span>
+                                        </div>
+                                        <div class="feature-tag">
+                                            <i class="fas fa-battery-full"></i>
+                                            <span>7-Day Battery</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-buy-now">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="carousel-nav carousel-next" id="nextBtn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- HOW IT WORKS SECTION -->
+        <section class="how-it-works-preview" id="how-it-works" style="padding: 4rem 0; background: var(--bg-secondary);">
+            <div class="container">
+                <div class="section-header">
+                    <h2>How It Works</h2>
+                    <p>Simple setup, powerful protection in 4 easy steps</p>
+                </div>
+                
+                <div class="steps-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div class="step-card" style="background: white; padding: 2rem; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div class="step-number" style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">1</div>
+                        <div class="step-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-box-open" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Unbox & Charge</h3>
+                        <p style="color: var(--text-secondary);">Receive your KEYLIGTASAN and charge it fully using the included USB-C cable.</p>
+                    </div>
+                    
+                    <div class="step-card" style="background: white; padding: 2rem; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div class="step-number" style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">2</div>
+                        <div class="step-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-mobile-alt" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Download App</h3>
+                        <p style="color: var(--text-secondary);">Install the KEYLIGTASAN app from the Google Play Store and create your account.</p>
+                    </div>
+                    
+                    <div class="step-card" style="background: white; padding: 2rem; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div class="step-number" style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">3</div>
+                        <div class="step-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-bluetooth" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Pair Device</h3>
+                        <p style="color: var(--text-secondary);">Connect your keychain to your phone via Bluetooth in seconds.</p>
+                    </div>
+                    
+                    <div class="step-card" style="background: white; padding: 2rem; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div class="step-number" style="width: 60px; height: 60px; background: linear-gradient(135deg, #E74C3C, #C0392B); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">4</div>
+                        <div class="step-icon" style="margin-bottom: 1rem;">
+                            <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Stay Protected</h3>
+                        <p style="color: var(--text-secondary);">Attach to your bag and enjoy peace of mind wherever you go.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA SECTION -->
+        <section class="cta-section" style="padding: 4rem 0; background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; text-align: center;">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 style="color: white; margin-bottom: 1rem;">Ready to Stay Safe?</h2>
+                    <p style="font-size: 1.125rem; margin-bottom: 2rem; opacity: 0.9;">Order your KEYLIGTASAN today and experience peace of mind</p>
+                    <a href="#products" class="btn btn-primary btn-lg smooth-scroll" style="background: var(--accent-color); border: 2px solid var(--accent-color);">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- FOOTER WITH GET SUPPORT BUTTON -->
+    <footer class="footer" id="contact-us">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>About KEYLIGTASAN</h3>
+                    <p>Your trusted personal safety companion. We provide IoT-enabled security keychain to keep you safe in crowded places and emergencies.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home" class="smooth-scroll">Home</a></li>
+                        <li><a href="#about" class="smooth-scroll">About Us</a></li>
+                        <li><a href="#how-it-works" class="smooth-scroll">How It Works</a></li>
+                        <li><a href="login.html">Register</a></li>
+                        <li><a href="register.html">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:support@keyligtasan.com">support@keyligtasan.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+639123456789">+63 912 345 6789</a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Manila, Philippines</span>
+                        </div>
+                    </div>
+                    
+                    <!-- BUTTON TO OPEN SUPPORT MODAL -->
+                    <button type="button" class="btn btn-primary btn-block contact-trigger" id="openSupportBtn" style="margin-top: 1.5rem;">
+                        <i class="fas fa-headset"></i> Get Support
+                    </button>
+                    <p style="text-align: center; font-size: 0.875rem; color: #ADB5BD; margin-top: 0.5rem;">
+                        Click here to submit a support ticket
+                    </p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 KEYLIGTASAN. All rights reserved. | Made with <i class="fas fa-heart"></i> for your safety</p>
+            </div>
+        </div>
+    </footer>
+    
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- SUPPORT MODAL WITH IMAGE UPLOAD -->
+    <div class="support-modal" id="supportModal">
+        <div class="support-modal-container">
+            
+            <!-- Close Button -->
+            <button class="modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Modal Header -->
+            <div class="support-modal-header">
+                <h2>Support</h2>
+                <p>How can we help you?</p>
+                
+                <div class="modal-search-box">
+                    <input type="text" placeholder="Search..." id="modalSearchInput">
+                    <button type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="support-modal-body">
+                <div class="support-form-card-modal">
+                    <h3>Submit a Ticket</h3>
+                    
+                    <div class="modal-alert modal-alert-success" id="modalSuccessAlert" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="modalSuccessMessage">Your ticket has been submitted successfully!</span>
+                    </div>
+                    
+                    <div class="modal-alert modal-alert-error" id="modalErrorAlert" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="modalErrorMessage">Please fill in all required fields.</span>
+                    </div>
+                    
+                    <form id="supportModalForm" class="support-modal-form">
+                        <div class="form-group">
+                            <label for="modalFullName">Full Name</label>
+                            <input 
+                                type="text" 
+                                id="modalFullName" 
+                                name="full_name" 
+                                placeholder="Enter your full name" 
+                                required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="modalEmail">Email</label>
+                            <input 
+                                type="email" 
+                                id="modalEmail" 
+                                name="email" 
+                                placeholder="Enter your email address" 
+                                required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="modalIssueDescription">Issue Description</label>
+                            <textarea 
+                                id="modalIssueDescription" 
+                                name="issue_description" 
+                                rows="5" 
+                                placeholder="Describe your issue in detail..."
+                                required></textarea>
+                        </div>
+                        
+                        <!-- IMAGE UPLOAD SECTION -->
+                        <div class="form-group">
+                            <label for="modalAttachment">
+                                <i class="fas fa-paperclip"></i> Attach Images (Optional)
+                            </label>
+                            <div class="file-upload-wrapper">
+                                <input 
+                                    type="file" 
+                                    id="modalAttachment" 
+                                    name="attachment" 
+                                    accept="image/*"
+                                    multiple
+                                    style="display: none;">
+                                <button type="button" class="btn-upload" id="uploadBtn">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    Choose Images
+                                </button>
+                                <span class="file-info" id="fileInfo">No files selected</span>
+                            </div>
+                            
+                            <!-- Image Preview Area -->
+                            <div class="image-preview-container" id="imagePreviewContainer"></div>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit-modal">Submit</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script src="../js/script.js"></script>
+    
+    <!-- Carousel Script -->
+    <script>
+    (function() {
+        const track = document.getElementById('carouselTrack');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('carouselDots');
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+        
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        
+        // Auto-advance carousel every 5 seconds
+        setInterval(nextSlide, 5000);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+        });
+    })();
+    </script>
+    
+    <!-- Support Modal Script -->
+    <script>
+    (function() {
+        console.log('Support modal script loading...');
+        
+        function initSupportModal() {
+            const supportModal = document.getElementById('supportModal');
+            const openSupportBtn = document.getElementById('openSupportBtn');
+            const closeModal = document.getElementById('closeModal');
+            const supportForm = document.getElementById('supportModalForm');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileInput = document.getElementById('modalAttachment');
+            const fileInfo = document.getElementById('fileInfo');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const successAlert = document.getElementById('modalSuccessAlert');
+            const errorAlert = document.getElementById('modalErrorAlert');
+            
+            console.log('Button found:', openSupportBtn ? 'YES' : 'NO');
+            
+            let selectedFiles = [];
+            
+            function openModal() {
+                console.log('Opening modal...');
+                supportModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeModalFunc() {
+                console.log('Closing modal...');
+                supportModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
+            if (openSupportBtn) {
+                openSupportBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Button clicked!');
+                    openModal();
+                });
+            }
+            
+            if (closeModal) {
+                closeModal.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeModalFunc();
+                });
+            }
+            
+            if (supportModal) {
+                supportModal.addEventListener('click', function(e) {
+                    if (e.target === supportModal) {
+                        closeModalFunc();
+                    }
+                });
+            }
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && supportModal && supportModal.style.display === 'flex') {
+                    closeModalFunc();
+                }
+            });
+            
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', function() {
+                    fileInput.click();
+                });
+            }
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    selectedFiles = files;
+                    
+                    if (files.length > 0) {
+                        fileInfo.textContent = `${files.length} file(s) selected`;
+                        displayImagePreviews(files);
+                    } else {
+                        fileInfo.textContent = 'No files selected';
+                        imagePreviewContainer.innerHTML = '';
+                    }
+                });
+            }
+            
+            function displayImagePreviews(files) {
+                if (!imagePreviewContainer) return;
+                
+                imagePreviewContainer.innerHTML = '';
+                
+                files.forEach((file, index) => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const previewItem = document.createElement('div');
+                            previewItem.className = 'preview-item';
+                            previewItem.innerHTML = `
+                                <img src="${e.target.result}" alt="Preview">
+                                <button type="button" class="preview-remove" data-index="${index}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            `;
+                            imagePreviewContainer.appendChild(previewItem);
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            if (imagePreviewContainer) {
+                imagePreviewContainer.addEventListener('click', function(e) {
+                    if (e.target.closest('.preview-remove')) {
+                        const index = parseInt(e.target.closest('.preview-remove').dataset.index);
+                        selectedFiles.splice(index, 1);
+                        
+                        if (selectedFiles.length > 0) {
+                            fileInfo.textContent = `${selectedFiles.length} file(s) selected`;
+                            displayImagePreviews(selectedFiles);
+                        } else {
+                            fileInfo.textContent = 'No files selected';
+                            imagePreviewContainer.innerHTML = '';
+                            if (fileInput) fileInput.value = '';
+                        }
+                    }
+                });
+            }
+            
+            if (supportForm) {
+                supportForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const fullName = document.getElementById('modalFullName').value.trim();
+                    const email = document.getElementById('modalEmail').value.trim();
+                    const issueDescription = document.getElementById('modalIssueDescription').value.trim();
+                    
+                    if (successAlert) successAlert.style.display = 'none';
+                    if (errorAlert) errorAlert.style.display = 'none';
+                    
+                    if (!fullName || !email || !issueDescription) {
+                        if (errorAlert) {
+                            document.getElementById('modalErrorMessage').textContent = 'Please fill in all required fields.';
+                            errorAlert.style.display = 'flex';
+                        }
+                        return;
+                    }
+                    
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        if (errorAlert) {
+                            document.getElementById('modalErrorMessage').textContent = 'Please enter a valid email address.';
+                            errorAlert.style.display = 'flex';
+                        }
+                        return;
+                    }
+                    
+                    console.log('Support Ticket Submitted:', {
+                        fullName,
+                        email,
+                        issueDescription,
+                        filesCount: selectedFiles.length
+                    });
+                    
+                    if (successAlert) successAlert.style.display = 'flex';
+                    
+                    supportForm.reset();
+                    selectedFiles = [];
+                    if (fileInfo) fileInfo.textContent = 'No files selected';
+                    if (imagePreviewContainer) imagePreviewContainer.innerHTML = '';
+                    
+                    setTimeout(() => {
+                        closeModalFunc();
+                        if (successAlert) successAlert.style.display = 'none';
+                    }, 2000);
+                });
+            }
+            
+            console.log('Support modal initialized!');
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSupportModal);
+        } else {
+            initSupportModal();
+        }
+    })();
+    </script>
+</body>
+</html>

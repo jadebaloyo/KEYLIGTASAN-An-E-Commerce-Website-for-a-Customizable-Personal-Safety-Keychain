@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - KEYLIGTASAN</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/orders.css">
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-key"></i>
+                <span>KEYLIGTASAN</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-btn">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="orders.html" class="nav-btn active">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>My Orders</span>
+                </a>
+                <a href="shop.html" class="nav-btn">
+                    <i class="fas fa-store"></i>
+                    <span>Shop</span>
+                </a>
+            </div>
+            
+            <div class="nav-user">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">User</span>
+                </div>
+                
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>My Orders</h1>
+            <p>View and track your order history</p>
+        </div>
+        
+        <!-- Orders Container -->
+        <div class="orders-container" id="ordersContainer">
+            <!-- Orders will be loaded here -->
+        </div>
+        
+        <!-- Empty Orders -->
+        <div class="empty-orders" id="emptyOrders" style="display: none;">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>No orders yet</h3>
+            <p>Start shopping to see your orders here!</p>
+            <a href="shop.html" class="btn-shop">
+                <i class="fas fa-store"></i>
+                Browse Products
+            </a>
+        </div>
+        
+    </div>
+    
+    <!-- Order Details Modal -->
+    <div class="order-modal" id="orderModal">
+        <div class="modal-overlay" onclick="closeOrderDetails()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <button class="btn-close" onclick="closeOrderDetails()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="orderDetailsContent">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="../js/orders.js"></script>
+    
+</body>
+</html>

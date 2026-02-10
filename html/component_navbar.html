@@ -1,0 +1,105 @@
+<!-- NAVIGATION BAR COMPONENT -->
+<!-- This is the navbar section from index.html -->
+<!-- Copy this into your index.html between <body> tag -->
+
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <div class="nav-wrapper">
+            <!-- Logo -->
+            <div class="logo">
+                <a href="#home" class="smooth-scroll">
+                    <i class="fas fa-key"></i>
+                    <span>KEYLIGTASAN</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="smooth-scroll active">HOME</a></li>
+                <li><a href="#about" class="smooth-scroll">ABOUT US</a></li>
+                <li><a href="#how-it-works" class="smooth-scroll">HOW IT WORKS</a></li>
+                <li><a href="#contact-us" class="smooth-scroll">CONTACT US</a></li>
+            </ul>
+            
+            <!-- Auth Buttons / User Menu -->
+            <div class="nav-actions" id="navActions">
+                <!-- Show when NOT logged in -->
+                <div class="auth-buttons" id="authButtons">
+                    <a href="../auth/login.html" class="btn btn-outline">LOGIN</a>
+                    <a href="../auth/register.html" class="btn btn-primary">REGISTER</a>
+                </div>
+                
+                <!-- Show when logged in (hidden by default) -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-info">
+                            <p class="user-name" id="userFullName">Loading...</p>
+                            <p class="user-email" id="userEmail">Loading...</p>
+                        </div>
+                        <ul>
+                            <li><a href="#" id="dashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                            <li><a href="../customer/orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
+                            <li><a href="../customer/profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                            <li><a href="../customer/settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Burger Button -->
+            <button class="burger-btn" id="burgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Sidebar -->
+<div class="mobile-sidebar" id="mobileSidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-user" id="sidebarUser" style="display: none;">
+            <i class="fas fa-user-circle"></i>
+            <div class="user-details">
+                <p class="user-name" id="sidebarUserName">Loading...</p>
+                <p class="user-email" id="sidebarUserEmail">Loading...</p>
+            </div>
+        </div>
+        <h3 id="sidebarTitle">Menu</h3>
+        <button class="close-sidebar" id="closeSidebar">&times;</button>
+    </div>
+    
+    <ul class="sidebar-menu" id="sidebarMenu">
+        <li><a href="#home" class="smooth-scroll"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#about" class="smooth-scroll"><i class="fas fa-info-circle"></i> About Us</a></li>
+        <li><a href="#how-it-works" class="smooth-scroll"><i class="fas fa-cogs"></i> How It Works</a></li>
+        <li><a href="#contact-us" class="smooth-scroll"><i class="fas fa-envelope"></i> Contact Us</a></li>
+        
+        <!-- Auth links (show when not logged in) -->
+        <li class="menu-divider" id="authDivider"></li>
+        <li id="loginLink"><a href="../auth/login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        <li id="registerLink"><a href="../auth/register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+        
+        <!-- User links (show when logged in) -->
+        <div id="userLinks" style="display: none;">
+            <li class="menu-divider"></li>
+            <li><a href="#" id="mobileDashboardLink"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="../customer/orders.html"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
+            <li><a href="../customer/profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+            <li><a href="../customer/settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+            <li class="menu-divider"></li>
+            <li><a href="#" id="mobileLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </div>
+    </ul>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>

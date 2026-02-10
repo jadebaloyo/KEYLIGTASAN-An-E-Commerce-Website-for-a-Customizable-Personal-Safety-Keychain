@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Status Update Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .result {
+            background: white;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .success { border-left-color: #27ae60; }
+        .error { border-left-color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Order Status Update - Test Page</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Check if PHP File Exists</h2>
+        <button onclick="testFileExists()">Test File Access</button>
+        <div id="result1" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Check Database Connection</h2>
+        <button onclick="testDatabase()">Test Database</button>
+        <div id="result2" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Update Order Status</h2>
+        <p>Order ID: <input type="number" id="orderId" value="109" style="padding: 5px; width: 100px;"></p>
+        <p>New Status: 
+            <select id="newStatus" style="padding: 5px;">
+                <option>Pending - Awaiting Confirmation</option>
+                <option>Confirmed - Order Accepted</option>
+                <option selected>Processing - Being Prepared</option>
+                <option>Ready for Pickup/Delivery</option>
+                <option>Out for Delivery</option>
+                <option>Delivered</option>
+                <option>Completed - Order Fulfilled</option>
+            </select>
+        </p>
+        <button onclick="testUpdate()">Update Status</button>
+        <div id="result3" class="result" style="display:none;"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: View Current Order Status</h2>
+        <button onclick="viewOrder()">View Order</button>
+        <div id="result4" class="result" style="display:none;"></div>
+    </div>
+    
+    <script>
+        const apiPath = '/keyligtasan/php/config/update_order_status.php';
+        const getOrdersPath = '/keyligtasan/php/config/get_all_orders.php';
+        
+        function testFileExists() {
+            const result = document.getElementById('result1');
+            result.style.display = 'block';
+            result.innerHTML = '⏳ Testing...';
+            
+            fetch(apiPath + '?test=1')
+                .then(response => {
+                    if (response.status === 404) {
+                        result.className = 'result error';
+                        result.innerHTML = '❌ <strong>File NOT Found (404)</strong><br>The PHP file does not exist at: ' + apiPath;
+                    } else {
+                        result.className = 'result success';
+                        result.innerHTML = '✅ <strong>File Found!</strong><br>Status: ' + response.status + '<br>URL: ' + apiPath;
+                    }
+                })
+                .catch(error => {
+                    result.className = 'result error';
+                    result.innerHTML = '❌ <strong>Error:</strong> ' + error.message;
+                });
+        }
+        
+        function testDatabase() {
+            const result = document.getElementById('result2');
+            result.style.display = 'block';
+            result.innerHTML = '⏳ Testing database connection...';
+            
+            fetch(getOrdersPath)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        result.className = 'result success';
+                        result.innerHTML = '✅ <strong>Database Connected!</strong><br>' +
+                            'Found ' + data.count + ' orders<br>' +
+                            'Total Revenue: ₱' + data.stats.totalRevenue;
+                    } else {
+                        result.className = 'result error';
+                        result.innerHTML = '❌ <strong>Database Error:</strong> ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    result.className = 'result error';
+                    result.innerHTML = '❌ <strong>Error:</strong> ' + error.message;
+                });
+        }
+        
+        function testUpdate() {
+            const orderId = document.getElementById('orderId').value;
+            const newStatus = document.getElementById('newStatus').value;
+            const result = document.getElementById('result3');
+            
+            result.style.display = 'block';
+            result.innerHTML = '⏳ Updating order #' + orderId + ' to "' + newStatus + '"...';
+            
+            const requestData = {
+                order_id: parseInt(orderId),
+                status: newStatus
+            };
+            
+            console.log('Sending:', requestData);
+            
+            fetch(apiPath, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Raw response:', text);
+                
+                try {
+                    const data = JSON.parse(text);
+                    console.log('Parsed data:', data);
+                    
+                    if (data.success) {
+                        result.className = 'result success';
+                        result.innerHTML = '✅ <strong>Success!</strong><br>' +
+                            'Order: ' + data.order_number + '<br>' +
+                            'Old Status: ' + data.old_status + '<br>' +
+                            'New Status: ' + data.new_status + '<br>' +
+                            'Timestamp: ' + new Date(data.timestamp * 1000).toLocaleString();
+                    } else {
+                        result.className = 'result error';
+                        result.innerHTML = '❌ <strong>Failed:</strong> ' + data.message + '<br><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    }
+                } catch (e) {
+                    result.className = 'result error';
+                    result.innerHTML = '❌ <strong>JSON Parse Error:</strong> ' + e.message + '<br><strong>Raw response:</strong><pre>' + text + '</pre>';
+                }
+            })
+            .catch(error => {
+                result.className = 'result error';
+                result.innerHTML = '❌ <strong>Fetch Error:</strong> ' + error.message;
+                console.error('Error:', error);
+            });
+        }
+        
+        function viewOrder() {
+            const orderId = document.getElementById('orderId').value;
+            const result = document.getElementById('result4');
+            
+            result.style.display = 'block';
+            result.innerHTML = '⏳ Loading order #' + orderId + '...';
+            
+            fetch(getOrdersPath)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const order = data.orders.find(o => o.id == orderId);
+                        
+                        if (order) {
+                            result.className = 'result success';
+                            result.innerHTML = '✅ <strong>Order Found:</strong><br>' +
+                                'Order Number: ' + order.orderNumber + '<br>' +
+                                'Customer: ' + order.recipientName + '<br>' +
+                                '<strong>Current Status: ' + order.status + '</strong><br>' +
+                                'Total: ₱' + order.total + '<br>' +
+                                'Created: ' + order.createdAt + '<br>' +
+                                'Updated: ' + (order.updatedAt || 'N/A');
+                        } else {
+                            result.className = 'result error';
+                            result.innerHTML = '❌ Order #' + orderId + ' not found';
+                        }
+                    } else {
+                        result.className = 'result error';
+                        result.innerHTML = '❌ <strong>Error:</strong> ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    result.className = 'result error';
+                    result.innerHTML = '❌ <strong>Error:</strong> ' + error.message;
+                });
+        }
+    </script>
+</body>
+</html>

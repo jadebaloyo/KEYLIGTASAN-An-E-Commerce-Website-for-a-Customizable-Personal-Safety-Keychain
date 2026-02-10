@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - KEYLIGTASAN</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+    
+    <div class="container">
+        <!-- Left Side - Branding -->
+        <div class="left-side">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h1 class="brand-name">KEYLIGTASAN</h1>
+            </div>
+            
+            <h2 class="welcome-title">Join Us Today!</h2>
+            <p class="welcome-subtitle">Create your account and start protecting yourself with <strong>KEYLIGTASAN</strong></p>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span>Secure Registration</span>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <span>Email Verification</span>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <span>Welcome Bonus</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Registration Form -->
+        <div class="right-side">
+            <div class="form-container">
+                
+                <!-- Back Button -->
+                <a href="../html/homepage_index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to home
+                </a>
+                
+                <!-- Form Header -->
+                <div class="form-header">
+                    <h2>Create Your Account</h2>
+                    <p>Fill in the details below to get started</p>
+                </div>
+                
+                <!-- Alert Box (Hidden by default) -->
+                <div class="alert" style="display: none;"></div>
+                
+                <!-- Registration Form -->
+                <form id="registerForm" class="register-form">
+                    
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label for="fullName">
+                            <i class="fas fa-user"></i> Full Name
+                        </label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="full_name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i> Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                    
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="phone">
+                            <i class="fas fa-phone"></i> Phone Number
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone"
+                            placeholder="+63 XXX XXX XXXX"
+                        >
+                        <small class="field-note">Philippine mobile number (optional)</small>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                placeholder="Create a strong password"
+                                required
+                            >
+                            <button type="button" class="toggle-password" data-target="password">
+                                <i class="fas fa-eye" id="password-eye"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Password Strength -->
+                        <small class="field-note">Password strength: <span id="passwordStrengthText" class="strength-weak">Weak</span></small>
+                        
+                        <!-- Password Strength Bar -->
+                        <div class="password-strength-bar">
+                            <div id="passwordStrengthFill" class="strength-fill"></div>
+                        </div>
+                        
+                        <small class="field-note">At least 6 characters</small>
+                    </div>
+                    
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label for="confirmPassword">
+                            <i class="fas fa-lock"></i> Confirm Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                name="confirm_password"
+                                placeholder="Re-enter your password"
+                                required
+                            >
+                            <button type="button" class="toggle-password" data-target="confirmPassword">
+                                <i class="fas fa-eye" id="confirmPassword-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms & Conditions -->
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span class="checkmark"></span>
+                            <span class="checkbox-text">
+                                I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                    
+                    <!-- Divider -->
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+                    
+                    <!-- Social Sign Up -->
+                    <div class="social-buttons">
+                        <button type="button" class="btn-social btn-google">
+                            <i class="fab fa-google"></i> Sign up with Google
+                        </button>
+                        <button type="button" class="btn-social btn-facebook">
+                            <i class="fab fa-facebook-f"></i> Sign up with Facebook
+                        </button>
+                    </div>
+                    
+                    <!-- Login Link -->
+                    <p class="login-link">
+                        Already have an account? <a href="../html/login.html">Login here</a>
+                    </p>
+                    
+                </form>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="../js/register.js"></script>
+    
+</body>
+</html>

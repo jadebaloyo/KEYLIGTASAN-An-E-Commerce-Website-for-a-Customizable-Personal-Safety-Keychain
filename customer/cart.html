@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - KEYLIGTASAN</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/cart.css">
+
+    <!-- Enhanced Cart Icon Styles -->
+    <style>
+        /* Cart Icon Enhancement */
+        .cart-icon {
+            position: relative;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .cart-icon:hover {
+            background: rgba(231, 76, 60, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+        }
+
+        .cart-icon.active {
+            background: rgba(231, 76, 60, 0.2);
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.15);
+        }
+
+        .cart-icon i {
+            font-size: 22px;
+            color: #e74c3c;
+            transition: all 0.3s ease;
+        }
+
+        .cart-icon:hover i {
+            transform: scale(1.1);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 6px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.5);
+            border: 2px solid white;
+            animation: badge-pulse 2s infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(231, 76, 60, 0.5);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(231, 76, 60, 0.7);
+            }
+        }
+
+        .cart-badge:empty,
+        .cart-badge[data-count="0"] {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .cart-badge:not(:empty),
+        .cart-badge:not([data-count="0"]) {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Fallback: keeps modals hidden even if cart.css fails to load */
+        .checkout-modal,
+        .success-modal {
+            display: none !important;
+        }
+        .checkout-modal.active,
+        .success-modal.active {
+            display: flex !important;
+        }
+
+        /* Toast Notification Styles */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10000;
+            animation: slideInUp 0.3s ease;
+            max-width: 400px;
+        }
+
+        .toast-notification.success {
+            border-left: 4px solid #27ae60;
+        }
+
+        .toast-notification.error {
+            border-left: 4px solid #e74c3c;
+        }
+
+        .toast-notification.info {
+            border-left: 4px solid #3498db;
+        }
+
+        .toast-notification i {
+            font-size: 20px;
+        }
+
+        .toast-notification.success i {
+            color: #27ae60;
+        }
+
+        .toast-notification.error i {
+            color: #e74c3c;
+        }
+
+        .toast-notification.info i {
+            color: #3498db;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Form Row for side-by-side inputs */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cart-badge {
+                min-width: 18px;
+                height: 18px;
+                font-size: 10px;
+            }
+
+            .toast-notification {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: calc(100% - 40px);
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-key"></i>
+                <span>KEYLIGTASAN</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-btn">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="orders.html" class="nav-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>My Orders</span>
+                </a>
+                <a href="shop.html" class="nav-btn">
+                    <i class="fas fa-store"></i>
+                    <span>Shop</span>
+                </a>
+            </div>
+            
+            <div class="nav-user">
+                <!-- Updated Cart Icon - Active state shows you're on cart page -->
+                <a href="cart.html" class="cart-icon active" title="Shopping Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartCount" data-count="0">0</span>
+                </a>
+                
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">User</span>
+                </div>
+                
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+            <p>Review your items before checkout</p>
+        </div>
+        
+        <!-- Cart Content -->
+        <div class="cart-content">
+            
+            <!-- Cart Items Section -->
+            <div class="cart-items-section">
+                <div class="section-header">
+                    <h2>Cart Items</h2>
+                    <button class="btn-clear-cart" onclick="clearCart()">
+                        <i class="fas fa-trash"></i> Clear Cart
+                    </button>
+                </div>
+                
+                <div id="cartItemsContainer"></div>
+                
+                <!-- Empty Cart -->
+                <div class="empty-cart" id="emptyCart" style="display: none;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Add some items to get started!</p>
+                    <a href="shop.html" class="btn-shop">
+                        <i class="fas fa-store"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Cart Summary Section (hidden until cart loads with items) -->
+            <div class="cart-summary-section" id="cartSummarySection" style="display: none;">
+                <div class="summary-card">
+                    <h2>Order Summary</h2>
+                    
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotalAmount">₱0.00</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span id="shippingAmount">₱150.00</span>
+                    </div>
+                    
+                    <div class="summary-note">
+                        <i class="fas fa-truck"></i>
+                        Free shipping on orders over ₱5,000
+                    </div>
+                    
+                    <div class="summary-divider"></div>
+                    
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="totalAmount">₱0.00</span>
+                    </div>
+                    
+                    <button class="btn-checkout" onclick="proceedToCheckout()">
+                        <i class="fas fa-credit-card"></i>
+                        Proceed to Checkout
+                    </button>
+                    
+                    <a href="shop.html" class="btn-continue-shopping">
+                        <i class="fas fa-arrow-left"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <!-- Checkout Modal (hidden by default) -->
+    <div class="checkout-modal" id="checkoutModal" style="display: none;">
+        <div class="modal-overlay" onclick="closeCheckoutModal()"></div>
+        
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fas fa-credit-card"></i> Checkout</h2>
+                <button class="btn-close" onclick="closeCheckoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="checkout-summary">
+                    <h3><i class="fas fa-list"></i> Order Summary</h3>
+                    <div id="checkoutItemsList"></div>
+                    <div class="checkout-total">
+                        <span>Total Amount:</span>
+                        <span id="checkoutTotalAmount">₱0.00</span>
+                    </div>
+                </div>
+                
+                <div class="checkout-form">
+                    <h3><i class="fas fa-truck"></i> Delivery Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Recipient Name *</label>
+                        <input type="text" id="deliveryName" placeholder="Enter recipient's full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contact Number *</label>
+                        <input type="tel" id="deliveryPhone" placeholder="+63 XXX XXX XXXX" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Street Address *</label>
+                        <textarea id="deliveryAddress" rows="3" placeholder="House/Building no., Street name, Barangay" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City/Municipality *</label>
+                            <input type="text" id="deliveryCity" placeholder="e.g. Caloocan City" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Province *</label>
+                            <input type="text" id="deliveryProvince" placeholder="e.g. Metro Manila" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Postal Code</label>
+                        <input type="text" id="deliveryPostalCode" placeholder="e.g. 1400" maxlength="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Payment Method *</label>
+                        <select id="paymentMethod" required>
+                            <option value="">Select payment method</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                            <option value="GCash">GCash</option>
+                            <option value="PayMaya">PayMaya</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Order Notes (Optional)</label>
+                        <textarea id="orderNotes" rows="2" placeholder="Any special instructions or delivery notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeCheckoutModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-place-order" onclick="placeOrder()">
+                    <i class="fas fa-check-circle"></i>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal (hidden by default) -->
+    <div class="success-modal" id="successModal" style="display: none;">
+        <div class="modal-overlay"></div>
+        
+        <div class="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h2>Order Placed Successfully!</h2>
+            
+            <div class="order-info">
+                <p><span>Order ID:</span> <strong id="orderIdDisplay">#0001</strong></p>
+                <p><span>Total:</span> <strong id="orderTotalDisplay">₱0.00</strong></p>
+                <p><span>Status:</span> <strong class="status-processing">Processing</strong></p>
+            </div>
+            
+            <p class="success-message">
+                Thank you for your order! We'll send you a confirmation email shortly.
+            </p>
+            
+            <div class="success-buttons">
+                <button class="btn-view-orders" onclick="viewOrders()">
+                    <i class="fas fa-shopping-bag"></i>
+                    View My Orders
+                </button>
+                <button class="btn-continue" onclick="continueShopping()">
+                    <i class="fas fa-store"></i>
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="../js/cart.js"></script>
+    <script src="../js/checkout_with_stock_reduction.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order API Diagnostic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #e74c3c; }
+        h3 { color: #2c3e50; margin-top: 0; }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover { background: #c0392b; }
+        .success { color: #27ae60; font-weight: bold; }
+        .error { color: #e74c3c; font-weight: bold; }
+        input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 KEYLIGTASAN Order API Diagnostic</h1>
+    
+    <div class="box">
+        <h3>Step 1: Test API Connection</h3>
+        <label>User ID: </label>
+        <input type="number" id="userId" value="1">
+        <button onclick="testAPI()">Test API</button>
+        <button onclick="testSimple()">Test Simple Version</button>
+    </div>
+    
+    <div class="box">
+        <h3>Step 2: View Response</h3>
+        <div id="status"></div>
+        <pre id="response">Click "Test API" to see response...</pre>
+    </div>
+    
+    <div class="box">
+        <h3>Step 3: Troubleshooting Tips</h3>
+        <ul>
+            <li>Make sure XAMPP/WAMP is running</li>
+            <li>Check that MySQL service is started</li>
+            <li>Verify database name in getorders.php (line 12)</li>
+            <li>Make sure the file is at: <code>php/config/getorders.php</code></li>
+        </ul>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const userId = document.getElementById('userId').value;
+            const statusDiv = document.getElementById('status');
+            const responseDiv = document.getElementById('response');
+            
+            statusDiv.innerHTML = '⏳ Testing...';
+            responseDiv.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`../php/config/getorders.php?user_id=${userId}`);
+                const contentType = response.headers.get('content-type');
+                const text = await response.text();
+                
+                responseDiv.textContent = text;
+                
+                // Check if it's JSON
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        statusDiv.innerHTML = `<span class="success">✅ SUCCESS! Found ${data.count} orders</span>`;
+                    } else {
+                        statusDiv.innerHTML = `<span class="error">❌ API Error: ${data.message}</span>`;
+                    }
+                } catch (e) {
+                    statusDiv.innerHTML = `<span class="error">❌ Response is not valid JSON! Check PHP file for errors.</span>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="error">❌ Fetch Error: ${error.message}</span>`;
+                responseDiv.textContent = error.message;
+            }
+        }
+        
+        async function testSimple() {
+            const userId = document.getElementById('userId').value;
+            const statusDiv = document.getElementById('status');
+            const responseDiv = document.getElementById('response');
+            
+            statusDiv.innerHTML = '⏳ Testing simple version...';
+            responseDiv.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`../php/config/getorders_simple.php?user_id=${userId}`);
+                const text = await response.text();
+                
+                responseDiv.textContent = text;
+                
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        statusDiv.innerHTML = `<span class="success">✅ SIMPLE VERSION WORKS! Found ${data.count} orders</span>`;
+                    } else {
+                        statusDiv.innerHTML = `<span class="error">❌ Error: ${data.message}</span>`;
+                    }
+                } catch (e) {
+                    statusDiv.innerHTML = `<span class="error">❌ Not valid JSON</span>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="error">❌ ${error.message}</span>`;
+                responseDiv.textContent = error.message;
+            }
+        }
+    </script>
+</body>
+</html>
